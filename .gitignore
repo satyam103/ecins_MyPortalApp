@@ -34,7 +34,6 @@ local.properties
 node_modules/
 assets/
 android/
-ios/
 config/
 npm-debug.log
 yarn-error.log
