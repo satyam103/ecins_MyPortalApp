@@ -33,10 +33,12 @@ local.properties
 #
 node_modules/
 assets/
-android/
 config/
 npm-debug.log
 yarn-error.log
+
+# android/
+*.hprof
 
 # BUCK
 buck-out/

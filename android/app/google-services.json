@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "802970050310",
+    "project_id": "myportal360-6dc39",
+    "storage_bucket": "myportal360-6dc39.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:802970050310:android:e7461e8e1fdfedd2230887",
+        "android_client_info": {
+          "package_name": "com.myportalapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "802970050310-dq50ds8if0rriapuo3q0gb64msliaddk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuLzA8fgAuJsywoSc-c_IuIpHB3GxhUzI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "802970050310-dq50ds8if0rriapuo3q0gb64msliaddk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
