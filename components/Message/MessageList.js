@@ -82,7 +82,7 @@ export default class MessageList extends Component {
     showMessageList = <Text style={{marginLeft:10}}>No messages available</Text>;
     if (this.state.error) {
       showMessageList = <Text>No messages available</Text>;
-    } else if(this.state.MessagesList.length > 0) {
+    } else if (this.state.MessagesList.length > 0) {
       const newMessageList = [...this.state.MessagesList];
 
       showMessageList = newMessageList.map((message, index) => {
@@ -147,9 +147,7 @@ export default class MessageList extends Component {
                 ]}>
                 My Messages
               </Text>
-              <View style={Styles.MessageListContainer}>
-                {showMessageList}
-              </View>
+              <View style={Styles.MessageListContainer}>{showMessageList}</View>
               <Spinner
                 visible={this.state.spinner}
                 textContent={'Loading...'}

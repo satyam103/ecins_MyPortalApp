@@ -4,7 +4,6 @@ import {
   PermissionsAndroid,
   TouchableOpacity,
   View,
-  useWindowDimensions,
 } from 'react-native';
 import {
   SafeAreaView,
@@ -21,7 +20,6 @@ import {
 import {Button, TextArea} from 'native-base';
 import {Col, Row} from 'react-native-easy-grid';
 import Styles from '../css/style';
-import AppFooter from '../Footer/Footer';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Icon1 from 'react-native-vector-icons/MaterialIcons';
@@ -34,14 +32,10 @@ import DocumentPicker from 'react-native-document-picker';
 import FilePickerManager from 'react-native-file-picker';
 import RNFS from 'react-native-fs';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SoundRecorder from 'react-native-sound-recorder';
 import IconEntypo from 'react-native-vector-icons/Entypo';
 import ValidationComponent from 'react-native-form-validator';
 import SoundPlayer from 'react-native-sound-player';
-import AudioRecorderPlayer from 'react-native-audio-recorder-player';
-// import Pdf from 'react-native-pdf';
-// import RNFetchBlob from 'rn-fetch-blob';
 
 export default class CreateChat extends ValidationComponent {
   constructor(props) {
@@ -78,8 +72,6 @@ export default class CreateChat extends ValidationComponent {
       flatListOffset: 0,
     };
     this.flatListRef = React.createRef();
-    // this.scrollView = React.createRef();
-    this.audioRecorderPlayer = new AudioRecorderPlayer();
 
     //get storage data
     const authDetails = AsyncStorage.getItem('authDetails', (err, result) => {
@@ -349,8 +341,8 @@ export default class CreateChat extends ValidationComponent {
     let that = this;
     SoundRecorder.stop().then(function (result) {
       console.log('stopped recording, audio file saved at: ' + result.path);
-      that.setState({document_name: 'sound-recording.mp4'});
-      that.setState({fileName: 'sound-recording.mp4'});
+      that.setState({document_name: 'sound-recording.mp3'});
+      that.setState({fileName: 'sound-recording.mp3'});
       console.log(result, '=====================================');
 
       RNFS.readFile(result.path, 'base64').then((res) => {
@@ -373,67 +365,6 @@ export default class CreateChat extends ValidationComponent {
     } catch (e) {
       console.log(`cannot play the sound file`, e);
     }
-  };
-
-  // =============================================================================================================
-  onStartRecord = async () => {
-    this.setState({audioRecord: true});
-    this.setState({fileUploadingMsg: 'Recording...'});
-
-    let timeCounter = 0;
-    var intervalId = setInterval(function () {
-      if (timeCounter % 3 == 0) {
-        // this.setState({fileUploadingMsg: 'Recording...'});
-      } else {
-        // this.setState({fileUploadingMsg: 'Recording...'});
-      }
-      timeCounter = timeCounter + 1;
-    }, 1000);
-    // store intervalId in the state so it can be accessed later:
-    this.setState({intervalId: intervalId});
-    const result = await this.audioRecorderPlayer.startRecorder();
-    this.audioRecorderPlayer.addRecordBackListener((e) => {
-      this.setState({
-        recordSecs: e.currentPosition,
-        recordTime: this.audioRecorderPlayer.mmssss(
-          Math.floor(e.currentPosition),
-        ),
-      });
-      return;
-    });
-    console.log(result);
-  };
-
-  onStopRecord = async () => {
-    clearInterval(this.state.intervalId);
-    this.setState({fileUploadingMsg: 'Tap the microphone to record'});
-    this.setState({playButton: true});
-    this.setState({audioRecord: false});
-    const result = await this.audioRecorderPlayer.stopRecorder();
-    this.audioRecorderPlayer.removeRecordBackListener();
-    this.setState({document_uri: result});
-    this.setState({document_name: 'sound-recording.mp4'});
-    this.setState({fileName: 'sound-recording.mp4'});
-    console.log(result);
-  };
-
-  onStartPlay = async () => {
-    console.log('onStartPlay');
-    const msg = await this.audioRecorderPlayer.startPlayer(
-      this.state.document_uri,
-    );
-    console.log(msg);
-    this.audioRecorderPlayer.addPlayBackListener((e) => {
-      this.setState({
-        currentPositionSec: e.currentPosition,
-        currentDurationSec: e.duration,
-        playTime: this.audioRecorderPlayer.mmssss(
-          Math.floor(e.currentPosition),
-        ),
-        duration: this.audioRecorderPlayer.mmssss(Math.floor(e.duration)),
-      });
-      return;
-    });
   };
 
   // =============================================================================================================
@@ -601,7 +532,7 @@ export default class CreateChat extends ValidationComponent {
         let filename = this.state.document_name;
         let extension = extenstionFile[1];
         let base64_file = this.state.document_uri;
-        
+
         newMessage.append('file', {
           filename: filename,
           extension: extension, // Adjust the file type accordingly
@@ -1161,13 +1092,6 @@ export default class CreateChat extends ValidationComponent {
             </KeyboardAvoidingView>
           </SafeAreaView>
         </View>
-
-        {/* <View>
-          <AppFooter
-            stackName={this.props.route.name}
-            navigation={this.props.navigation}
-          />
-        </View> */}
         {this.state.active_private_mode && (
           <View
             style={{

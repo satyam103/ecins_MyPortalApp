@@ -312,7 +312,7 @@ export default class MessageList extends Component {
 
     return (
       <View>
-        <View style={{height:'96%'}}>
+        <View >
           <SafeAreaView>
             <ScrollView
               contentInsetAdjustmentBehavior="automatic"
@@ -374,12 +374,12 @@ export default class MessageList extends Component {
             </ScrollView>
           </SafeAreaView>
         </View>
-        <View>
+        {/* <View>
           <AppFooter
             stackName={this.props.route.name}
             navigation={this.props.navigation}
           />
-        </View>
+        </View> */}
         {this.state.active_private_mode && (
           <View
             style={{

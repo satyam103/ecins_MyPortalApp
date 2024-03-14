@@ -8,6 +8,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   Linking,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {Text, TextArea, Button, Image} from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -54,6 +55,7 @@ export default class MessageList extends ValidationComponent {
       audioPlaying: false,
       fileUploadingMsg: 'Tap the microphone to record',
       playButton: true,
+      flexProp: 0,
     };
   }
 
@@ -102,7 +104,7 @@ export default class MessageList extends ValidationComponent {
       });
   }
 
-  recordAudio = () => {
+  recordAudio = async () => {
     this.setState({audioRecord: true});
     this.setState({fileUploadingMsg: 'Recording...'});
 
@@ -119,11 +121,25 @@ export default class MessageList extends ValidationComponent {
     // store intervalId in the state so it can be accessed later:
     this.setState({intervalId: intervalId});
 
-    SoundRecorder.start(SoundRecorder.PATH_CACHE + '/sound-recording.mp4').then(
-      function () {
-        console.log('started recording');
-      },
-    );
+    try {
+      const grants = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+      );
+      console.log('record audio', grants);
+      if (grants === PermissionsAndroid.RESULTS.GRANTED) {
+        SoundRecorder.start(
+          SoundRecorder.PATH_CACHE + '/sound_recording.mp3',
+        ).then(function () {
+          console.log('started recording');
+        });
+      } else {
+        console.log('Sound recording permission not granted');
+        return;
+      }
+    } catch (err) {
+      console.warn(err);
+      return;
+    }
   };
 
   recordAudioStop = () => {
@@ -131,15 +147,16 @@ export default class MessageList extends ValidationComponent {
     this.setState({fileUploadingMsg: 'Tap the microphone to record'});
     this.setState({audioRecord: false});
     this.setState({playButton: true});
+
     let that = this;
     SoundRecorder.stop().then(function (result) {
-      console.log(result);
       console.log('stopped recording, audio file saved at: ' + result.path);
-      that.setState({document_name: 'sound-recording.mp4'});
-      that.setState({fileName: 'sound-recording.mp4'});
+      that.setState({document_name: 'sound-recording.mp3'});
+      that.setState({fileName: 'sound-recording.mp3'});
 
       RNFS.readFile(result.path, 'base64').then((res) => {
-        that.setState({document_uri: res});
+        // that.setState({document_uri: res});
+        that.setState({document_uri: result.path});
       });
     });
   };
@@ -150,7 +167,8 @@ export default class MessageList extends ValidationComponent {
       // SoundPlayer.playSoundFile('tone', 'mp3')
       // or play from url
       alert('audio playing');
-      SoundPlayer.playUrl(SoundRecorder.PATH_CACHE + '/sound-recording.mp4');
+      // SoundPlayer.playUrl(SoundRecorder.PATH_CACHE + '/sound-recording.mp4');
+      SoundPlayer.playUrl(this.state.document_uri);
       this.setState({audioPlaying: true});
     } catch (e) {
       console.log(`cannot play the sound file`, e);
@@ -244,9 +262,9 @@ export default class MessageList extends ValidationComponent {
         this.setState({document_name: res.name});
         this.setState({fileName: res.name});
         this.setState({playButton: false});
-        RNFS.readFile(res.uri, 'base64').then((res) => {
-          this.setState({document_uri: res});
-        });
+        // RNFS.readFile(res.uri, 'base64').then((res) => {
+        this.setState({document_uri: res.uri});
+        // });
       } catch (err) {
         if (DocumentPicker.isCancel(err)) {
           Alert.alert('Canceled');
@@ -293,14 +311,27 @@ export default class MessageList extends ValidationComponent {
     });
 
     if (this.state.message != '') {
-      var formData = {
-        done: 0,
-        message: this.state.message,
-      };
+      // var formData = {
+      //   done: 0,
+      //   message: this.state.message,
+      // };
+      let formData = new FormData();
+      formData.append('done', 0);
+      formData.append('message', this.state.message);
 
       if (this.state.document_name !== '') {
-        formData.filename = this.state.document_name;
-        formData.files = this.state.document_uri;
+        // formData.filename = this.state.document_name;
+        // formData.files = this.state.document_uri;
+        let extenstionFile = this.state.document_name.split('.');
+        let filename = this.state.document_name;
+        let extension = extenstionFile[1];
+        let base64_file = this.state.document_uri;
+
+        formData.append('file', {
+          filename: filename,
+          extension: extension, // Adjust the file type accordingly
+          base64_file: base64_file,
+        });
       }
 
       this.setState({spinner: true});
@@ -749,15 +780,15 @@ export default class MessageList extends ValidationComponent {
     return (
       <TouchableWithoutFeedback onPress={() => this.handlePress()}>
         <View>
-          <View style={{height: '96%'}}>
+          <View>
             <SafeAreaView>
-              <ScrollView
-                keyboardShouldPersistTaps={'handled'}
-                style={[{height: this.state.show ? '65%' : '90%'}]}>
-                <View style={Styles.CreateMessageheaderContainer}>
-                  <Text style={Styles.CreateMessagemessageTitle}>
-                    My Messages
-                  </Text>
+              <View style={Styles.CreateMessageheaderContainer}>
+                <Text style={Styles.CreateMessagemessageTitle}>
+                  My Messages
+                </Text>
+                <ScrollView
+                  keyboardShouldPersistTaps={'handled'}
+                  style={[{height: this.state.show ? '58%' : '86%'}]}>
                   <View style={Styles.CreateMessagelistContainer}>
                     <View avatar style={Styles.CreateMessagelistItemsBg}>
                       <View>
@@ -844,8 +875,8 @@ export default class MessageList extends ValidationComponent {
                       )}
                     </View>
                   </View>
-                </View>
-              </ScrollView>
+                </ScrollView>
+              </View>
               {this.state.showAddMsgBtn && (
                 <Button
                   warning
@@ -860,151 +891,153 @@ export default class MessageList extends ValidationComponent {
                 </Button>
               )}
               {this.state.show ? (
-                <View style={{top: 10, bottom: 2, marginHorizontal: 10}}>
-                  <View regular style={Styles.CreateMessagetextInputBigBox}>
-                    <TextArea
-                      style={Styles.CreateMessageloginInputBoxArea}
-                      rowSpan={4}
-                      name="message"
-                      placeholder="Enter message"
-                      onChangeText={(message) => this.setState({message})}>
-                      {this.state.message}
-                    </TextArea>
-                  </View>
-                  <View style={Styles.adFile}>
-                    <Row style={{padding: 10}}>
-                      <Col size={10}>
-                        <IconAttachment
-                          onPress={this.SingleFilePicker.bind(this)}
-                          style={{
-                            color: '#666666',
-                            flex: 1,
-                            top: 5,
-                          }}
-                          size={13}
-                          name="attachment"
-                        />
-                      </Col>
-                      <Col size={90}>
-                        {this.state.fileName != '' ? (
-                          <Text
-                            style={{
-                              fontFamily: 'Helvetica',
-                              fontSize: 12,
-                              color: '#666666',
-                            }}>
-                            {this.state.fileName}
-                            {'  '}
-                            {this.state.playButton && (
-                              <FeatherIcon
-                                name="play"
-                                size={13}
-                                onPress={() =>
-                                  this.copyfile(
-                                    this.state.document_uri,
-                                    this.state.document_name,
-                                  )
-                                }></FeatherIcon>
+                <KeyboardAvoidingView
+                  behavior={Platform.OS === 'ios' ? 'padding' : null}
+                  // style={{flex: this.state.flexProp}}
+                >
+                  <TouchableWithoutFeedback onPress={() => this.handlePress()}>
+                    <View style={{top: 10, bottom: 2, marginHorizontal: 10}}>
+                      <View regular style={Styles.CreateMessagetextInputBigBox}>
+                        <TextArea
+                          style={Styles.CreateMessageloginInputBoxArea}
+                          rowSpan={3}
+                          name="message"
+                          placeholder="Enter message"
+                          onChangeText={(message) =>
+                            this.setState({message})
+                          }></TextArea>
+                      </View>
+                      <View style={Styles.adFile}>
+                        <Row style={{padding: 10}}>
+                          <Col size={10}>
+                            <IconAttachment
+                              onPress={this.SingleFilePicker.bind(this)}
+                              style={{
+                                color: '#666666',
+                                flex: 1,
+                                top: 5,
+                              }}
+                              size={13}
+                              name="attachment"
+                            />
+                          </Col>
+                          <Col size={90}>
+                            {this.state.fileName != '' ? (
+                              <Text
+                                style={{
+                                  fontFamily: 'Helvetica',
+                                  fontSize: 12,
+                                  color: '#666666',
+                                }}>
+                                {this.state.fileName}
+                                {'  '}
+                                {this.state.playButton && (
+                                  <FeatherIcon
+                                    name="play"
+                                    size={13}
+                                    onPress={() =>
+                                      this.playAudioStored()
+                                    }></FeatherIcon>
+                                )}
+                                {'  '}
+                                <FeatherIcon
+                                  name="trash"
+                                  onPress={this.deletefile}></FeatherIcon>
+                              </Text>
+                            ) : (
+                              <Text
+                                style={{
+                                  fontFamily: 'Helvetica',
+                                  fontSize: 13,
+                                  color: '#666666',
+                                }}>
+                                Click paperclip to attach file
+                              </Text>
                             )}
-                            {'  '}
-                            <FeatherIcon
-                              name="trash"
-                              onPress={this.deletefile}></FeatherIcon>
-                          </Text>
-                        ) : (
-                          <Text
-                            style={{
-                              fontFamily: 'Helvetica',
-                              fontSize: 13,
-                              color: '#666666',
-                            }}>
-                            Click paperclip to attach file
-                          </Text>
-                        )}
-                      </Col>
-                    </Row>
-                  </View>
-                  <View style={Styles.recordAudio}>
-                    <Row style={{paddingHorizontal: 10}}>
-                      <Col size={10}>
-                        {this.state.audioRecord && (
-                          <FeatherIcon
-                            onPress={this.recordAudioStop}
-                            style={{
-                              color: '#666666',
-                              flex: 1,
-                              top: 5,
-                            }}
-                            name="mic"
-                            size={13}
-                          />
-                        )}
-                        {!this.state.audioRecord && (
-                          <FeatherIcon
-                            onPress={this.recordAudio}
-                            style={{
-                              color: '#666666',
-                              flex: 1,
-                              top: 5,
-                            }}
-                            name="mic-off"
-                            size={13}
-                          />
-                        )}
-                      </Col>
-                      <Col size={80}>
-                        {this.state.fileName != '' ? (
-                          <Text
-                            style={{
-                              fontFamily: 'Helvetica',
-                              fontSize: 13,
-                              color: '#666666',
-                            }}>
-                            {this.state.fileUploadingMsg}
-                          </Text>
-                        ) : (
-                          <Text
-                            style={{
-                              fontFamily: 'Helvetica',
-                              fontSize: 13,
-                              color: '#666666',
-                            }}>
-                            {this.state.fileUploadingMsg}
-                          </Text>
-                        )}
-                      </Col>
-                      <Col size={10} style={{alignItems: 'center'}}></Col>
-                    </Row>
-                  </View>
+                          </Col>
+                        </Row>
+                      </View>
+                      <View style={Styles.recordAudio}>
+                        <Row style={{paddingHorizontal: 10}}>
+                          <Col size={10}>
+                            {this.state.audioRecord && (
+                              <FeatherIcon
+                                onPress={this.recordAudioStop}
+                                style={{
+                                  color: '#666666',
+                                  flex: 1,
+                                  top: 5,
+                                }}
+                                name="mic"
+                                size={13}
+                              />
+                            )}
+                            {!this.state.audioRecord && (
+                              <FeatherIcon
+                                onPress={this.recordAudio}
+                                style={{
+                                  color: '#666666',
+                                  flex: 1,
+                                  top: 5,
+                                }}
+                                name="mic-off"
+                                size={13}
+                              />
+                            )}
+                          </Col>
+                          <Col size={80}>
+                            {this.state.fileName != '' ? (
+                              <Text
+                                style={{
+                                  fontFamily: 'Helvetica',
+                                  fontSize: 13,
+                                  color: '#666666',
+                                }}>
+                                {this.state.fileUploadingMsg}
+                              </Text>
+                            ) : (
+                              <Text
+                                style={{
+                                  fontFamily: 'Helvetica',
+                                  fontSize: 13,
+                                  color: '#666666',
+                                }}>
+                                {this.state.fileUploadingMsg}
+                              </Text>
+                            )}
+                          </Col>
+                          <Col size={10} style={{alignItems: 'center'}}></Col>
+                        </Row>
+                      </View>
 
-                  {this.isFieldInError('message') &&
-                    this.getErrorsInField('message').map((errorMessage, i) => (
-                      <Text style={Styles.LoginViewerrorMsg}>
-                        {errorMessage}
-                      </Text>
-                    ))}
-                  <Button
-                    onPress={this.onSubmitMessage}
-                    warning
-                    full
-                    style={Styles.ViewMessagesBtn}>
-                    <Text style={Styles.ViewMessagesBtnText} uppercase={false}>
-                      Send Message
-                    </Text>
-                  </Button>
-                </View>
+                      {this.isFieldInError('message') &&
+                        this.getErrorsInField('message').map(
+                          (errorMessage, i) => (
+                            <Text style={Styles.LoginViewerrorMsg}>
+                              {errorMessage}
+                            </Text>
+                          ),
+                        )}
+                      <Button
+                        onPress={this.onSubmitMessage}
+                        warning
+                        full
+                        style={Styles.ViewMessagesBtn}>
+                        <Text
+                          style={Styles.ViewMessagesBtnText}
+                          uppercase={false}>
+                          Send Message
+                        </Text>
+                      </Button>
+                    </View>
+                  </TouchableWithoutFeedback>
+                </KeyboardAvoidingView>
               ) : null}
               <Spinner
                 visible={this.state.spinner}
                 textContent={'Loading...'}
               />
             </SafeAreaView>
-          </View>
-          <View>
-            <AppFooter
-              stackName={this.props.route.name}
-              navigation={this.props.navigation}
-            />
           </View>
           {this.state.active_private_mode && (
             <View

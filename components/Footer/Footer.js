@@ -88,39 +88,38 @@ export default class FooterTabsIconTextExample extends Component {
               borderLeftWidth: 1,
               borderRightWidth: 1,
               borderTopWidth: 1,
-              padding: 10,
+              padding: 8,
               backgroundColor: '#fff',
             }}>
             <Col size={5}></Col>
             <Col size={14}>
               <Icon
-                onPress={() => this.props.navigation.push('MyAccount')}
+                onPress={() => this.props.navigation.push('Task')}
                 style={
-                  this.props.stackName == 'MyAccount'
+                  this.props.stackName == 'Task'
                     ? styles.highlightTabIcon
-                    : this.props.stackName == 'MyAccount'
+                    : this.props.stackName == 'Task'
                     ? styles.highlightTabIcon
                     : styles.appFooterIcon
                 }
-                name="user"
-                // name="th-list"
+                // name="user"
+                name="th-list"
               />
               <Text
-                onPress={() => this.props.navigation.push('MyAccount')}
+                onPress={() => this.props.navigation.push('Task')}
                 style={
-                  this.props.stackName == 'MyAccount'
+                  this.props.stackName == 'Task'
                     ? styles.highlightTab
-                    : this.props.stackName == 'MyAccount'
+                    : this.props.stackName == 'Task'
                     ? styles.highlightTab
                     : styles.appFooterBtn
                 }>
-                Account
+                Task
               </Text>
             </Col>
-            {/* <Col size={21}>
+            <Col size={21}>
               <Icon
-                onPress={() => this.setState({popup2: true})}
-                // onPress={() => this.props.navigation.push('JournalList')}
+                onPress={() => this.props.navigation.push('JournalList')}
                 style={
                   this.props.stackName == 'JournalList'
                     ? styles.highlightTabIcon
@@ -130,8 +129,7 @@ export default class FooterTabsIconTextExample extends Component {
                 active
               />
               <Text
-                onPress={() => this.setState({popup2: true})}
-                // onPress={() => this.props.navigation.push('JournalList')}
+                onPress={() => this.props.navigation.push('JournalList')}
                 style={
                   this.props.stackName == 'JournalList'
                     ? styles.highlightTab
@@ -139,7 +137,7 @@ export default class FooterTabsIconTextExample extends Component {
                 }>
                 My Diary
               </Text>
-            </Col> */}
+            </Col>
             <Col size={5}></Col>
             <Col
               size={20}
@@ -149,8 +147,7 @@ export default class FooterTabsIconTextExample extends Component {
                 alignItems: 'center',
               }}>
               <View
-                onPress={() => this.props.navigation.push('ScanScreen')}
-                // onPress={() => this.openExtraOption()}
+                onPress={() => this.openExtraOption()}
                 style={{
                   backgroundColor: '#fff',
                   width: 60,
@@ -173,21 +170,20 @@ export default class FooterTabsIconTextExample extends Component {
                 }}>
                 <Icon
                   size={35}
-                  onPress={() => this.props.navigation.push('ScanScreen')}
-                  // onPress={() => this.openExtraOption()}
+                  onPress={() => this.openExtraOption()}
                   style={[
                     styles.appFooterMiddleIcon,
                     this.props.stackName == 'ScanScreen'
                       && styles.highlightMiddleTabIcon
                   ]}
-                  name="qrcode"
+                  name="plus"
                 />
               </View>
             </Col>
             <Col size={5}></Col>
-            {/* <Col size={21}>
+            <Col size={21}>
               <Icon
-                onPress={() => this.props.navigation.push('ScanScreen')}
+                onPress={() => this.props.navigation.push('EMessage')}
                 style={
                   this.props.stackName == 'EMessage'
                     ? styles.highlightTabIcon
@@ -197,11 +193,10 @@ export default class FooterTabsIconTextExample extends Component {
                     ? styles.highlightTabIcon
                     : styles.appFooterIcon
                 }
-                name="qrcode"
-                // name="envelope"
+                name="envelope"
               />
               <Text
-                onPress={() => this.props.navigation.push('ScanScreen')}
+                onPress={() => this.props.navigation.push('EMessage')}
                 style={
                   this.props.stackName == 'EMessage'
                     ? styles.highlightTab
@@ -211,15 +206,12 @@ export default class FooterTabsIconTextExample extends Component {
                     ? styles.highlightTab
                     : styles.appFooterBtn
                 }>
-                Attendance
                  My Messages 
               </Text>
-            </Col> */}
+            </Col>
             <Col size={14}>
               <IconMaterialCom
                 onPress={() =>
-                  // this.setState({popup2: true})
-                  // this.props.navigation.push('EditSettings')
                   this.props.navigation.push('ChatMessage', {chat: chat})
                 }
                 style={
@@ -227,11 +219,10 @@ export default class FooterTabsIconTextExample extends Component {
                     ? styles.highlightTabIcon
                     : styles.appFooterIcon
                 }
-                name="message                                                                                                                                                                                                                             "
+                name="message"
               />
               <Text
                 onPress={
-                  // () => this.props.navigation.push('EditSettings')
                   ()=> this.props.navigation.push('ChatMessage', {chat: chat})
                 }
                 style={

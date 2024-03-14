@@ -55,9 +55,9 @@ export default class Login extends ValidationComponent {
                   if (wheatherResponse !== null) {
                     if (wheatherResponse.isEnable)
                       this.props.navigation.navigate('HideFunction');
-                    else this.props.navigation.navigate('MyAccount');
+                    else this.props.navigation.navigate('Task');
                   } else {
-                    this.props.navigation.navigate('MyAccount');
+                    this.props.navigation.navigate('Task');
                   }
                 });
               }
@@ -68,7 +68,7 @@ export default class Login extends ValidationComponent {
               if (!statusResponse.status) {
                 this.props.navigation.navigate('Login');
               } else {
-                this.props.navigation.navigate('MyAccount');
+                this.props.navigation.navigate('Task');
               }
             });
           }
@@ -220,7 +220,7 @@ export default class Login extends ValidationComponent {
               });
             }
           }).then((res) => {
-            this.props.navigation.navigate('MyAccount');
+            this.props.navigation.navigate('Task');
           });
         } else {
           this.props.navigation.navigate('Login');

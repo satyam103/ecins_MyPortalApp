@@ -46,6 +46,7 @@ export default class MessageList extends Component {
   componentDidMount() {
     getDataParamUrl('GET', 'chat/updates', true)
       .then((response) => {
+        // console.log(response,'==============')
         if (response.message == undefined) {
           this.setState({chatList: response});
         }

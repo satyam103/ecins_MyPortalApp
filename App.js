@@ -352,32 +352,32 @@ function RootStack() {
               </TouchableOpacity>
             ),
             headerRight: (props) => <UserImage navigation={navigation} />,
-            headerLeft: () => null,
-            // <View
-            //   style={{
-            //     flexDirection: 'row',
-            //     justifyContent: 'space-between',
-            //   }}>
-            //   <Icon
-            //     onPress={() => {
-            //       navigation.goBack();
-            //     }}
-            //     style={{
-            //       fontSize: 25,
-            //       marginLeft: 0,
-            //       fontWeight: 'bold',
-            //       marginTop: 5,
-            //     }}
-            //     name="keyboard-arrow-left"
-            //   />
-            //   <Text
-            //     onPress={() => {
-            //       navigation.goBack();
-            //     }}
-            //     style={{fontWeight: 'bold', marginTop: 10}}>
-            //     Back
-            //   </Text>
-            // </View>
+            headerLeft: () => 
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <Icon
+                onPress={() => {
+                  navigation.goBack();
+                }}
+                style={{
+                  fontSize: 25,
+                  marginLeft: 0,
+                  fontWeight: 'bold',
+                  marginTop: 5,
+                }}
+                name="keyboard-arrow-left"
+              />
+              <Text
+                onPress={() => {
+                  navigation.goBack();
+                }}
+                style={{fontWeight: 'bold', marginTop: 10}}>
+                Back
+              </Text>
+            </View>
           })}
         />
         <Stack.Screen

@@ -37,7 +37,7 @@ export default class ChangePasscode extends Component {
     };
     // get auth details and update login details inside json
     AsyncStorage.setItem('passCodeDetails', JSON.stringify(responseJson));
-    this.props.navigation.navigate('MyAccount');
+    this.props.navigation.navigate('Task');
   };
 
   changePasscodeData = (PasscodeData, status) => {
