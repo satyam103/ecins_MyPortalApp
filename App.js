@@ -353,6 +353,7 @@ function RootStack() {
               </TouchableOpacity>
             ),
             headerRight: (props) => <UserImage navigation={navigation} />,
+
             headerLeft: () => (
               <View
                 style={{
@@ -380,6 +381,7 @@ function RootStack() {
                 </Text>
               </View>
             ),
+     
           })}
         />
         <Stack.Screen

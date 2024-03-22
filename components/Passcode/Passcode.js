@@ -2,37 +2,16 @@ import React, {Component} from 'react';
 import {
   View,
   Text,
-  Image,
   SafeAreaView,
   ScrollView,
-  TouchableOpacity,
-  TouchableHighlight,
-  BackHandler,
-  Alert,
   TextInput,
 } from 'react-native';
-import Geolocation from '@react-native-community/geolocation';
 import Styles from '../css/style';
-import Spinner from 'react-native-loading-spinner-overlay';
-import Icon from 'react-native-vector-icons/Feather';
 import {
-  Left,
-  List,
-  ListItem,
-  Right,
-  Body,
   Container,
-  Content,
-  Input,
-  Item,
   Button,
 } from 'native-base';
-import {Col, Row, Grid} from 'react-native-easy-grid';
-import moment from 'moment';
-import {createIconSetFromFontello} from 'react-native-vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import SoundRecorder from 'react-native-sound-recorder';
-import {PermissionsAndroid} from 'react-native';
 
 //import QRCode from 'react-native-qrcode-generator';
 

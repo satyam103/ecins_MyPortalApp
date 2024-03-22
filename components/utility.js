@@ -135,16 +135,26 @@ export async function postDataUrl(method, urlType, formData, profile = false) {
   myHeaders.append('Content-Type', 'application/json');
   myHeaders.append('Authorization', 'Bearer ' + access_token);
   myHeaders.append('Cookie', 'logged_in=1');
-
-  var requestOptions = {
-    method: method,
-    headers: myHeaders,
-    body: raw,
-    redirect: 'follow',
-  };
-
+  let requestOptions;
+  if (profile) {
+    requestOptions = {
+      method: method,
+      headers: myHeaders,
+      body: formData,
+      redirect: 'follow',
+    };
+  } else {
+    requestOptions = {
+      method: method,
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
+  }
+  console.log(url,'=======',requestOptions);
   const data = await fetch(url, requestOptions)
     .then((response) => {
+      console.log(response,'----------------')
       return response.json();
     })
     .then((responseJson) => {

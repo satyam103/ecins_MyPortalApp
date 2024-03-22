@@ -58,6 +58,7 @@ export default class Login extends ValidationComponent {
                     else this.props.navigation.navigate('MyEvents');
                   } else {
                     this.props.navigation.navigate('MyEvents');
+
                   }
                 });
               }

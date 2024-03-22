@@ -63,9 +63,9 @@ export default class PasscodeLogin extends Component {
             if (wheatherResponse !== null) {
               if (wheatherResponse.isEnable)
                 this.props.navigation.navigate('HideFunction');
-              else this.props.navigation.navigate('MyAccount');
+              else this.props.navigation.navigate('Task');
             } else {
-              this.props.navigation.navigate('MyAccount');
+              this.props.navigation.navigate('Task');
             }
           });
         } else {

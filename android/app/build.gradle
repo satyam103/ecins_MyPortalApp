@@ -192,7 +192,6 @@ dependencies {
     implementation "com.facebook.react:react-android"  // From node_modules
     implementation platform('com.google.firebase:firebase-bom:32.7.0')
     implementation project(':react-native-sound-recorder')
-    implementation project(':react-native-audio-recorder-player')
     // implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") 

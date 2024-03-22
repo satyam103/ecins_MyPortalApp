@@ -116,7 +116,7 @@ export default class HelpInfo extends Component {
   render() {
     return (
       <View>
-        <View style={{height:'96%'}}>
+        <View >
           <SafeAreaView>
             <ScrollView
               contentInsetAdjustmentBehavior="automatic"
@@ -195,12 +195,6 @@ export default class HelpInfo extends Component {
               />
             </ScrollView>
           </SafeAreaView>
-        </View>
-        <View>
-          <AppFooter
-            stackName={this.props.route.name}
-            navigation={this.props.navigation}
-          />
         </View>
         {this.state.active_private_mode && (
           <View

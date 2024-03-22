@@ -87,29 +87,6 @@ export default class EditSettings extends ValidationComponent {
                       <IconFont name="chevron-right" />
                     </View>
                   </Pressable>
-                  {/* <Pressable
-                    style={{flexDirection: 'row', marginVertical: 30}}
-                    onPress={() =>
-                      this.closeExtraOption('logout', {
-                        event_date: currentDate,
-                      })
-                    }>
-                    <View style={{marginRight: 10}}>
-                      <Text
-                        style={{
-                          textAlign: 'center',
-                          fontWeight: 'bold',
-                          marginBottom: 10,
-                          marginTop: 10,
-                          fontSize: 18,
-                        }}>
-                        Logout
-                      </Text>
-                    </View> */}
-                    {/* <View style={{alignSelf: 'center'}}>
-                      <IconFont name="chevron-right" />
-                    </View> */}
-                  {/* </Pressable> */}
                 </View>
               </View>
             </ScrollView>
