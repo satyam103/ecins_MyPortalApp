@@ -177,7 +177,7 @@ export default class JournalList extends Component {
   };
 
   // continue warning add journal process
-  continueJournalProcess = () => {
+  continueJournalProcess = async () => {
     this.setState({
       popup2: false,
       popup4: false,
@@ -204,12 +204,16 @@ export default class JournalList extends Component {
       newMinutes;
     this.setState({dateCustom: new Date()});
     this.setState({datePickerStatus: true});
+    const authDetails = await AsyncStorage.getItem('authDetails');
+    const authResponse = JSON.parse(authDetails);
+    const profile_uuid = authResponse.profile_uuid;
     var formData = {
       mood: this.state.moodType,
       entry_type: 2,
       details: this.state.journalMsg,
       when_sent: this.state.selected2,
       created_at: apiDate,
+      profile_id: profile_uuid,
     };
     console.log(formData);
     let urlType = 'journals';
@@ -300,13 +304,14 @@ export default class JournalList extends Component {
                   <View key={index} style={Styles.JournalListlistItemsJournal}>
                     <View>
                       {journals.mood > 0 && (
-                        <View style={{flexDirection:'row',alignItems:'center'}}>
-                          <Text style={{marginTop:2}}>
+                        <View
+                          style={{flexDirection: 'row', alignItems: 'center'}}>
+                          <Text style={{marginTop: 2}}>
                             Mood : {moodStatus[journals.mood]}{' '}
                           </Text>
                           <Emoji
                             name={moodExpression[journals.mood]}
-                            style={{fontSize: 25, marginTop:1}}
+                            style={{fontSize: 25, marginTop: 1}}
                           />
                         </View>
                       )}

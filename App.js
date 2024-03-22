@@ -49,14 +49,15 @@ import MyAccount from './components/Authentication/MyAccount';
 import EditSettings from './components/Authentication/EditSettings';
 import EmailSettings from './components/Authentication/EmailSettings';
 import ChangePasscode from './components/Passcode/ChangePasscode';
-import ScanScreen from './components/Authentication/ScanScreen';
+import ScanScreen from './components/MyEvents/ScanScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as RNLocalize from 'react-native-localize';
 import firebase from '@react-native-firebase/app';
 import messaging from '@react-native-firebase/messaging';
 import {NativeBaseProvider} from 'native-base';
 import SplashScreen from 'react-native-splash-screen';
-import Attendance from './components/Authentication/Attendance';
+import Attendance from './components/MyEvents/Attendance';
+import MyEvents from './components/MyEvents/MyEvents';
 console.disableYellowBox = true;
 const customTextProps = {
   style: {
@@ -90,7 +91,7 @@ function LogoImageRegular() {
 function RootStack() {
   const theme = useTheme();
   return (
-    <NavigationContainer ref={RootNavigation.navigationRef}>
+    <NavigationContainer ref={RootNavigation.navigationRef} theme={theme}>
       <Stack.Navigator
         initialRouteName="Login"
         screenOptions={{gestureEnabled: false, tintColor: '#43c2f0'}}
@@ -352,32 +353,35 @@ function RootStack() {
               </TouchableOpacity>
             ),
             headerRight: (props) => <UserImage navigation={navigation} />,
-            headerLeft: () => 
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}>
-              <Icon
-                onPress={() => {
-                  navigation.goBack();
-                }}
+
+            headerLeft: () => (
+              <View
                 style={{
-                  fontSize: 25,
-                  marginLeft: 0,
-                  fontWeight: 'bold',
-                  marginTop: 5,
-                }}
-                name="keyboard-arrow-left"
-              />
-              <Text
-                onPress={() => {
-                  navigation.goBack();
-                }}
-                style={{fontWeight: 'bold', marginTop: 10}}>
-                Back
-              </Text>
-            </View>
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+                <Icon
+                  onPress={() => {
+                    navigation.goBack();
+                  }}
+                  style={{
+                    fontSize: 25,
+                    marginLeft: 0,
+                    fontWeight: 'bold',
+                    marginTop: 5,
+                  }}
+                  name="keyboard-arrow-left"
+                />
+                <Text
+                  onPress={() => {
+                    navigation.goBack();
+                  }}
+                  style={{fontWeight: 'bold', marginTop: 10}}>
+                  Back
+                </Text>
+              </View>
+            ),
+     
           })}
         />
         <Stack.Screen
@@ -889,6 +893,59 @@ function RootStack() {
           })}
         />
         <Stack.Screen
+          name="MyEvents"
+          component={MyEvents}
+          options={({route, navigation}) => ({
+            headerStyle: {
+              backgroundColor: '#E0E0E0',
+            },
+            headerTitleStyle: {
+              height: 70,
+              marginRight: 'auto',
+              marginLeft: 'auto',
+            },
+            cardStyle: {
+              backgroundColor: '#fff',
+            },
+            headerTitleAlign: 'center',
+            headerTitle: () => (
+              <TouchableOpacity onPress={() => navigation.navigate('Task')}>
+                <Image
+                  style={{marginRight: 'auto', marginLeft: 'auto'}}
+                  source={require('./assets/images/myportal_logo_inline.png')}
+                />
+              </TouchableOpacity>
+            ),
+            headerRight: (props) => <UserImage navigation={navigation} />,
+            headerLeft: () => null,
+            // <View
+            //   style={{
+            //     flexDirection: 'row',
+            //     justifyContent: 'space-between',
+            //   }}>
+            //   <Icon
+            //     onPress={() => {
+            //       navigation.goBack();
+            //     }}
+            //     style={{
+            //       fontSize: 25,
+            //       marginLeft: 0,
+            //       fontWeight: 'bold',
+            //       marginTop: 5,
+            //     }}
+            //     name="keyboard-arrow-left"
+            //   />
+            //   <Text
+            //     onPress={() => {
+            //       navigation.goBack();
+            //     }}
+            //     style={{fontWeight: 'bold', marginTop: 10}}>
+            //     Back
+            //   </Text>
+            // </View>
+          })}
+        />
+        <Stack.Screen
           name="TaskView"
           component={TaskView}
           options={({route, navigation}) => ({
@@ -1176,7 +1233,7 @@ function RootStack() {
             },
             headerTitleAlign: 'center',
             headerTitle: () => (
-              <TouchableOpacity onPress={() => navigation.navigate('MyAccount')}>
+              <TouchableOpacity onPress={() => navigation.navigate('MyEvents')}>
                 <Image
                   style={{marginRight: 'auto', marginLeft: 'auto'}}
                   source={require('./assets/images/myportal_logo_inline.png')}
@@ -1191,7 +1248,7 @@ function RootStack() {
                   justifyContent: 'space-between',
                 }}>
                 <Icon
-                  onPress={() => navigation.navigate('MyAccount')}
+                  onPress={() => navigation.navigate('MyEvents')}
                   style={{
                     fontSize: 25,
                     marginLeft: 0,
@@ -1228,7 +1285,7 @@ function RootStack() {
             },
             headerTitleAlign: 'center',
             headerTitle: () => (
-              <TouchableOpacity onPress={() => navigation.navigate('Task')}>
+              <TouchableOpacity onPress={() => navigation.navigate('MyEvents')}>
                 <Image
                   style={{marginRight: 'auto', marginLeft: 'auto'}}
                   source={require('./assets/images/myportal_logo_inline.png')}
@@ -1243,7 +1300,7 @@ function RootStack() {
                   justifyContent: 'space-between',
                 }}>
                 <Icon
-                  onPress={() => navigation.navigate('MyAccount')}
+                  onPress={() => navigation.navigate('MyEvents')}
                   style={{
                     fontSize: 25,
                     marginLeft: 0,
@@ -1340,6 +1397,7 @@ export default class App extends React.Component {
     } else {
       this.requestPermission();
     }
+    requestLocationPermission();
   };
 
   requestPermission = async () => {

@@ -14,11 +14,12 @@ import {
 
 import QRCodeScanner from 'react-native-qrcode-scanner';
 // import { request } from 'react-native-permissions';
-import { PERMISSIONS, request } from 'react-native-permissions';
+import {PERMISSIONS, request} from 'react-native-permissions';
 import ValidationComponent from 'react-native-form-validator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import AppFooter from '../Footer/Footer';
+import {getDataParamUrl} from '../utility';
 
 export default class ScanScreen extends ValidationComponent {
   constructor(props) {
@@ -30,12 +31,20 @@ export default class ScanScreen extends ValidationComponent {
       data: [],
       joinTime: '',
       time: '0hr 0min 0sec',
+      accessToken: '',
     };
     this.date = new Date();
   }
   UNSAFE_componentWillMount = async () => {
     this.getJoinedTime();
+    this.getData();
     clearInterval(this.time);
+  };
+  getData = async () => {
+    const authDetails = await AsyncStorage.getItem('authDetails');
+    const authResponse = JSON.parse(authDetails);
+    const access_token = authResponse.access_token;
+    this.setState({accessToken: access_token});
   };
   getJoinedTime = async () => {
     const joinedTime = await AsyncStorage.getItem('joinedAt');
@@ -46,19 +55,28 @@ export default class ScanScreen extends ValidationComponent {
       this.setState({joinTime: joinedTime});
     }
   };
-  onSuccess = (e) => {
+  onSuccess = async (e) => {
     const data = e.data.split('/');
-
+    console.log(e);
     AsyncStorage.setItem('joinedAt', this.currentTime());
     AsyncStorage.setItem('lectureDetails', e.data);
     this.setState({data: data});
     this.setState({joined: true});
     this.setState({joinTime: this.currentTime()});
-    // Linking.openURL(e.data)
-    //   .then((result) => {
-    //     console.log(e.data);
-    //   })
-    //   .catch((err) => console.error('An error occured', err));
+    var myHeaders = new Headers();
+    myHeaders.append('Accept', 'application/json');
+    myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', 'Bearer ' + this.state.accessToken);
+    myHeaders.append('Cookie', 'logged_in=1');
+
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    };
+    const response = await fetch(e.data, requestOptions);
+    console.log(await response.json());
+    this.props.navigation.push('MyEvents');
   };
   componentDidMount = async () => {
     if (Platform.OS === 'ios') {
@@ -133,20 +151,12 @@ export default class ScanScreen extends ValidationComponent {
     return (
       <View style={{height: '100%'}}>
         <Spinner visible={this.state.spinner} textContent={'Loading...'} />
-        {!this.state.joined ? (
+        {!this.state.joined && (
           <QRCodeScanner
             onRead={this.onSuccess}
             reactivate={false}
             showMarker={true}
             containerStyle={{width: '100%', height: '100%'}}
-            cameraContainerStyle={
-              {
-                // height: '100%',
-                // width: '100%',
-              }
-            }
-            // cameraStyle={{width:'100%',height:'100%'}}
-            // topViewStyle={{position:'relative',elevation:10,top:200}}
             topContent={
               <Text style={styles.centerText}>
                 <Text style={styles.textBold}>
@@ -164,58 +174,6 @@ export default class ScanScreen extends ValidationComponent {
               </TouchableOpacity>
             }
           />
-        ) : (
-          <View>
-            <View style={{height: '96%'}}>
-              <View style={styles.attendanceCard}>
-                <Pressable
-                  style={styles.cardHeading}
-                  onPress={() => {
-                    AsyncStorage.removeItem('joinedAt');
-                    AsyncStorage.removeItem('lectureDetails');
-                    this.setState({time: '0hr 0min 0sec'});
-                    this.setState({joined: false});
-                    this.setState({joinTime: ''});
-                    this.setState({time: '0hr 0min 0sec'});
-                    this.setState({data: []});
-                  }}>
-                  <Text style={styles.title}>{this.state.data[0]}</Text>
-                  <Text style={styles.details}>{this.state.data[1]}</Text>
-                </Pressable>
-                <View style={styles.duration}>
-                  <Text style={styles.title1}>Duration : </Text>
-                  <Text style={styles.details}>{this.state.data[2]}</Text>
-                </View>
-                <View style={styles.desc}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}>
-                    <Text style={styles.title1}>Status-</Text>
-                    <Text style={styles.status}>Ongoing</Text>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}>
-                    <Text style={styles.title1}>Joined at-</Text>
-                    <Text style={styles.status}>{this.state.joinTime}</Text>
-                  </View>
-                </View>
-              </View>
-              <View style={styles.timeContent}>
-                <Text style={styles.time}>{this.state.time}</Text>
-              </View>
-            </View>
-            <View>
-              <AppFooter
-                stackName={this.props.route.name}
-                navigation={this.props.navigation}
-              />
-            </View>
-          </View>
         )}
       </View>
     );

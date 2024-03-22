@@ -63,7 +63,7 @@ export default class HideFunction extends Component {
         console.log(this.state.currentLongitude);
         // spinner true
         this.setState({spinner: true});
-        // get the task details
+        // get the MyEvents details
         fetch(
           'https://api.openweathermap.org/data/2.5/onecall?lat=' +
             this.state.currentLatitude +
@@ -152,7 +152,7 @@ export default class HideFunction extends Component {
       console.log(this.state.currentLongitude);
       // spinner true
       this.setState({spinner: true});
-      // get the task details
+      // get the MyEvents details
       fetch(
         'https://api.openweathermap.org/data/2.5/onecall?lat=' +
           this.state.currentLatitude +
@@ -256,7 +256,7 @@ export default class HideFunction extends Component {
               style={{paddingBottom: 25}}
               delayLongPress={3000}
               onLongPress={() => {
-                this.props.navigation.navigate('Task');
+                this.props.navigation.navigate('MyEvents');
               }}>
               <ScrollView
                 // style={{flex: 1}}
@@ -266,13 +266,13 @@ export default class HideFunction extends Component {
                   underlayColor="none"
                   delayLongPress={3000}
                   onLongPress={() => {
-                    this.props.navigation.navigate('Task');
+                    this.props.navigation.navigate('MyEvents');
                   }}>
                   <TouchableOpacity
                     underlayColor="none"
                     delayLongPress={3000}
                     onLongPress={() => {
-                      this.props.navigation.navigate('Task');
+                      this.props.navigation.navigate('MyEvents');
                     }}
                     style={{paddingHorizontal: 20, marginBottom: 20}}>
                     <View style={{alignSelf: 'center'}}>
@@ -281,7 +281,7 @@ export default class HideFunction extends Component {
                         source={this.state?.tempratureImg && {
                           uri: this.state.tempratureImg,
                         }}
-                        onPress={() => this.props.navigation.navigate('Task')}
+                        onPress={() => this.props.navigation.navigate('MyEvents')}
                       />
                       {/* <Text style={{color:'black'}}>vvhvjhb</Text> */}
                     </View>
@@ -289,7 +289,7 @@ export default class HideFunction extends Component {
                       underlayColor="black"
                       delayLongPress={3000}
                       onLongPress={() => {
-                        this.props.navigation.navigate('Task');
+                        this.props.navigation.navigate('MyEvents');
                       }}
                       style={{
                         justifyContent: 'space-between',
@@ -312,7 +312,7 @@ export default class HideFunction extends Component {
                       button={true}
                       delayLongPress={3000}
                       onLongPress={() => {
-                        this.props.navigation.navigate('Task');
+                        this.props.navigation.navigate('MyEvents');
                       }}
                       icon
                       style={{
@@ -347,7 +347,7 @@ export default class HideFunction extends Component {
                       button={true}
                       delayLongPress={3000}
                       onLongPress={() => {
-                        this.props.navigation.navigate('Task');
+                        this.props.navigation.navigate('MyEvents');
                       }}
                       icon>
                       <View>
@@ -370,7 +370,7 @@ export default class HideFunction extends Component {
                       button={true}
                       delayLongPress={3000}
                       onLongPress={() => {
-                        this.props.navigation.navigate('Task');
+                        this.props.navigation.navigate('MyEvents');
                       }}
                       icon>
                       <View>
@@ -401,7 +401,7 @@ export default class HideFunction extends Component {
                       button={true}
                       delayLongPress={3000}
                       onLongPress={() => {
-                        this.props.navigation.navigate('Task');
+                        this.props.navigation.navigate('MyEvents');
                       }}
                       icon>
                       <View>
@@ -432,7 +432,7 @@ export default class HideFunction extends Component {
                       button={true}
                       delayLongPress={3000}
                       onLongPress={() => {
-                        this.props.navigation.navigate('Task');
+                        this.props.navigation.navigate('MyEvents');
                       }}
                       icon>
                       <View>
@@ -455,7 +455,7 @@ export default class HideFunction extends Component {
                       button={true}
                       delayLongPress={3000}
                       onLongPress={() => {
-                        this.props.navigation.navigate('Task');
+                        this.props.navigation.navigate('MyEvents');
                       }}
                       icon>
                       <View>
@@ -486,7 +486,7 @@ export default class HideFunction extends Component {
                       button={true}
                       delayLongPress={3000}
                       onLongPress={() => {
-                        this.props.navigation.navigate('Task');
+                        this.props.navigation.navigate('MyEvents');
                       }}
                       icon>
                       <View>

@@ -72,12 +72,9 @@ export async function getDataParamUrl(method, urlType, profile = false) {
   };
   // console.log(url,"=====================================================")
   const data = await fetch(url, requestOptions)
+    .then((response) => response.json())
     .then((response) => {
-      // console.log(response,'----------------',url,'===========',requestOptions)
-      return response.json();
-    })
-    .then((response) => {
-      // console.log(response, 'hello resp');
+      // console.log(response, 'hello resp', url, '========', requestOptions);
       return response;
     })
     .catch((error) => {

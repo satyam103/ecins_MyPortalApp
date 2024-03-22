@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Button} from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 // import style from '../css/style';
@@ -78,8 +79,14 @@ export default class Attendance extends ValidationComponent {
   getJoinedTime = async () => {
     const joinedTime = await AsyncStorage.getItem('joinedAt');
     const lectureDetails = await AsyncStorage.getItem('lectureDetails');
-    this.setState({joinTime: joinedTime});
-    this.setState({data: lectureDetails.split('/')});
+    console.log(joinedTime, '====-----------------');
+    if (joinedTime !== undefined && joinedTime !== null) {
+      this.setState({joinTime: joinedTime});
+      this.setState({data: lectureDetails.split('/')});
+    } else {
+      this.setState({joinTime: ''});
+      this.setState({data: []});
+    }
   };
   getTime = () => {
     var cHours = new Date().getHours(); //Current Hours
@@ -120,57 +127,59 @@ export default class Attendance extends ValidationComponent {
   componentDidMount = async () => {
     // Start the timer when the component mounts
     setInterval(() => {
-      this.getTime();
+      if (this.state.joinTime !== '' && this.state.joinTime !== null) {
+        this.getTime();
+      }
     }, 1000); // Set the interval to 1000 milliseconds (1 second)
     if (joined === null && joined === '') {
-      // const lectureDetails = await AsyncStorage.getItem('lectureDetails')
       this.props.navigation.push('ScanScreen');
+    }
+  };
+  endSession = async () => {
+    try {
+      await AsyncStorage.removeItem('joinedAt');
+      await AsyncStorage.removeItem('lectureDetails');
+
+      this.getJoinedTime();
+    } catch (error) {
+      console.log(error, 'error in ending session');
     }
   };
   render() {
     return (
-      <View>
+      <View
+        style={{
+          backgroundColor: 'white',
+          elevation: 5,
+          borderRadius: 15,
+          padding: 15,
+          margin: 5,
+        }}>
         <Spinner visible={this.state.spinner} textContent={'Loading...'} />
-        <View style={styles.attendanceCard}>
-          <Pressable
-            style={styles.cardHeading}
-            onPress={() => {
-              AsyncStorage.removeItem('joinedAt');
-              AsyncStorage.removeItem('lectureDetails');
-              this.setState({time: '0hr 0min 0sec'});
-              this.props.navigation.navigate('ScanScreen');
-            }}>
-            <Text style={styles.title}>{this.state.data[0]}</Text>
-            <Text style={styles.details}>{this.state.data[1]}</Text>
-          </Pressable>
-          <View style={styles.duration}>
-            <Text style={styles.title1}>Duration : </Text>
-            <Text style={styles.details}>{this.state.data[2]}</Text>
-          </View>
-          {/* <View style={styles.joiningTitle}>
-          <Text style={styles.title1}>Joined at-</Text>
-          <Text style={styles.title1}>Ends at-</Text>
-        </View>
-        <View style={styles.joinTiming}>
-          <Text style={styles.details}>{getCurrentDate()}</Text>
-          <Text style={styles.details}>{getCurrentDate()}</Text>
-        </View> */}
-          <View style={styles.desc}>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text style={styles.title1}>Status-</Text>
-              <Text style={styles.status}>Ongoing</Text>
+        {this.state.joinTime ? (
+          <>
+            <View style={styles.attendanceCard}>
+              <View style={styles.cardHeading}>
+                <Text style={styles.title}>{'Event Name'}</Text>
+                <Text style={styles.details}>2 hr</Text>
+              </View>
+              <View style={styles.duration}>
+                <Text style={styles.title1}>Joined at-</Text>
+                <Text style={styles.status}>{this.state.joinTime}</Text>
+              </View>
             </View>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text style={styles.title1}>Joined at-</Text>
-              <Text style={styles.status}>{this.state.joinTime}</Text>
+            <View style={styles.timeContent}>
+              <Text style={styles.time}>{this.state.time}</Text>
             </View>
+            <Button colorScheme={'danger'} onPress={() => this.endSession()}>
+              <Text style={{color: 'white', fontSize: 16}}>End Session</Text>
+            </Button>
+          </>
+        ) : (
+          <View>
+            <Text>No Ongoing Event found</Text>
           </View>
-        </View>
-        <View style={styles.timeContent}>
-          <Text style={styles.time}>{this.state.time}</Text>
-        </View>
+        )}
       </View>
     );
   }
@@ -178,10 +187,9 @@ export default class Attendance extends ValidationComponent {
 
 const styles = StyleSheet.create({
   attendanceCard: {
-    width: '90%',
+    width: '100%',
     padding: 10,
-    marginTop: 20,
-    elevation: 10,
+    marginHorizontal: 10,
     borderRadius: 10,
     alignSelf: 'center',
     backgroundColor: '#43c2f0',
@@ -207,12 +215,15 @@ const styles = StyleSheet.create({
     fontFamily: 'times new roman',
   },
   status: {
-    color: 'red',
+    color: 'rgb(240,70,50)',
     fontWeight: 'bold',
     fontFamily: 'times new roman',
+    fontSize: 14,
   },
   duration: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   joiningTitle: {
     marginRight: 30,
@@ -231,7 +242,7 @@ const styles = StyleSheet.create({
   },
   timeContent: {
     // elevation: 15,
-    marginTop: 20,
+    marginTop: 10,
     alignSelf: 'center',
   },
   time: {

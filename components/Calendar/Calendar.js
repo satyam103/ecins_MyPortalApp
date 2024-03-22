@@ -26,6 +26,7 @@ export default class Calendar extends Component {
 
     getDataParamUrl('GET', 'calendar')
       .then((response) => {
+        console.log(response,'=======================================================')
         if (response.appts !== undefined) {
           this.setState({items: response});
           setTimeout(() => {

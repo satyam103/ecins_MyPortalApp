@@ -577,6 +577,7 @@ export default StyleSheet.create({
   HelpListheaderContainer: {
     width: '100%',
     paddingHorizontal: 24,
+    marginHorizontal:10
   },
   HelpListbookmarkedListItem: {
     borderBottomColor: '#CBCBCB',
@@ -595,6 +596,7 @@ export default StyleSheet.create({
     color: '#333333',
     fontWeight: 'bold',
     marginTop: 20,
+    paddingLeft:10
   },
   HelpListbookmarkedIcons: {
     textAlign: 'right',
@@ -665,6 +667,9 @@ export default StyleSheet.create({
     color: 'red',
     // marginTop:60,
     fontSize: 20,
+  },
+  HelpListscrollView :{
+    pmarginHorizontal:10
   },
 
   // Journal List Css

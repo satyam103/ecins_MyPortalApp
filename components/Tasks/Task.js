@@ -6,7 +6,7 @@ import {
   TouchableHighlight,
   Pressable,
 } from 'react-native';
-import { Badge, Text} from 'native-base';
+import {Badge, Text} from 'native-base';
 import styles from '../css/style';
 import Spinner from 'react-native-loading-spinner-overlay';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -66,9 +66,16 @@ export default class Task extends React.Component {
           var successTaskTotalVar = 0;
 
           for (let taskObject of response) {
-            var due_date = taskObject.due_date.split('/');
+            var due_date = taskObject.due_date.split(' ');
+            var newDate = due_date[0].split('/');
             var due_date_convert =
-              due_date[2] + '-' + due_date[1] + '-' + due_date[0];
+              newDate[2] +
+              '-' +
+              newDate[0] +
+              '-' +
+              newDate[1] +
+              'T' +
+              due_date[1];
 
             var due_date_task = new Date(due_date_convert);
             var today = new Date();
@@ -105,14 +112,16 @@ export default class Task extends React.Component {
 
   urgentDateConditon(taskDetails1) {
     // convert due date in actual format
-    var due_date = taskDetails1.due_date.split('/');
-    var due_date_convert = due_date[2] + '-' + due_date[1] + '-' + due_date[0];
+    var due_date = taskDetails1?.due_date.split(' ');
+    var newDate = due_date[0].split('/');
+    var due_date_convert =
+      newDate[2] + '-' + newDate[0] + '-' + newDate[1] + 'T' + due_date[1];
 
     var due_date_task = new Date(due_date_convert);
     var today = new Date();
     today.setHours(today.getHours() + 48);
 
-    if (taskDetails1.status != 2 && taskDetails1.status != 1) {
+    if (taskDetails1?.status != 2 && taskDetails1?.status != 1) {
       if (due_date_task.getTime() < today.getTime()) {
         return (
           <TouchableHighlight
@@ -153,8 +162,10 @@ export default class Task extends React.Component {
 
   warningDateConditon(taskDetails1) {
     // convert due date in actual format
-    var due_date = taskDetails1.due_date.split('/');
-    var due_date_convert = due_date[2] + '-' + due_date[1] + '-' + due_date[0];
+    var due_date = taskDetails1?.due_date.split(' ');
+    var newDate = due_date[0].split('/');
+    var due_date_convert =
+      newDate[2] + '-' + newDate[0] + '-' + newDate[1] + 'T' + due_date[1];
 
     var due_date_task = new Date(due_date_convert);
     var today = new Date();

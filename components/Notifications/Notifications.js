@@ -215,7 +215,7 @@ class Notifications extends React.Component {
     );
     if(filterArrayNotification.length === 0) {
       return (
-      <Text style={{margin:10,fontSize1:14}}>No notifications</Text>
+      <Text style={{margin:10,fontSize:14}}>No notifications</Text>
       );
     }
 

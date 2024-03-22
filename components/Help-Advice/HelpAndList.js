@@ -324,6 +324,7 @@ export default class MessageList extends Component {
                       justifyContent: 'space-between',
                       flexDirection: 'row',
                       marginTop: 20,
+                      marginHorizontal:10
                     }}>
                     <Text
                       style={[
