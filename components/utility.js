@@ -73,8 +73,8 @@ export async function getDataParamUrl(method, urlType, profile = false) {
   // console.log(url,"=====================================================")
   const data = await fetch(url, requestOptions)
     .then((response) => response.json())
-    .then( (response) => {
-      // console.log(response, 'hello resp');
+    .then((response) => {
+      // console.log(response, 'hello resp', url, '========', requestOptions);
       return response;
     })
     .catch((error) => {
@@ -151,7 +151,7 @@ export async function postDataUrl(method, urlType, formData, profile = false) {
       return responseJson;
     })
     .catch((error) => {
-      console.error(error,"post utility error");
+      console.error(error, 'post utility error');
     });
   return data;
 }
@@ -188,17 +188,17 @@ export async function getArticleDataUrl(urlType) {
     '/' +
     urlType;
 
-    var myHeaders = new Headers();
-    myHeaders.append('Accept', 'application/json');
-    myHeaders.append('Content-Type', 'application/json');
-    myHeaders.append('Authorization', 'Bearer ' + access_token);
-    myHeaders.append('Cookie', 'logged_in=1');
+  var myHeaders = new Headers();
+  myHeaders.append('Accept', 'application/json');
+  myHeaders.append('Content-Type', 'application/json');
+  myHeaders.append('Authorization', 'Bearer ' + access_token);
+  myHeaders.append('Cookie', 'logged_in=1');
 
-    var getRequestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow',
-    };
+  var getRequestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow',
+  };
 
   const data = await fetch(url, getRequestOptions)
     .then((response) => response.json())
@@ -206,7 +206,7 @@ export async function getArticleDataUrl(urlType) {
       return responseJson;
     })
     .catch((error) => {
-      console.error(error,"get artical utility");
+      console.error(error, 'get artical utility');
     });
   return data;
 }

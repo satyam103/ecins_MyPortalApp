@@ -3,6 +3,7 @@ import {Settings, StyleSheet, Text, View} from 'react-native';
 import {Badge} from 'native-base';
 import Dialog, {SlideAnimation} from 'react-native-popup-dialog';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon5 from 'react-native-vector-icons/FontAwesome5';
 import IconMaterialCom from 'react-native-vector-icons/MaterialIcons';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -22,6 +23,7 @@ export default class FooterTabsIconTextExample extends Component {
       spinner: false,
       popup1: false,
       popup2: false,
+      has_complete_access: false,
     };
   }
 
@@ -59,6 +61,13 @@ export default class FooterTabsIconTextExample extends Component {
       AsyncStorage.setItem('loginStatus', JSON.stringify({status: false}));
       this.setState({popup1: false});
       this.props.navigation.navigate('PasscodeLogin');
+    } else if (url == 'HelpAndList') {
+      this.setState({popup1: false});
+      if (this.state.has_complete_access === true) {
+        this.props.navigation.push(url, {payload: payload});
+      } else {
+        this.setState({popup2: true});
+      }
     } else {
       this.setState({popup1: false});
       this.props.navigation.push(url, {payload: payload});
@@ -88,58 +97,78 @@ export default class FooterTabsIconTextExample extends Component {
               borderLeftWidth: 1,
               borderRightWidth: 1,
               borderTopWidth: 1,
-              padding: 10,
+              padding: 8,
               backgroundColor: '#fff',
             }}>
             <Col size={5}></Col>
-            <Col size={14}>
-              <Icon
-                onPress={() => this.props.navigation.push('MyAccount')}
+            <Col size={21}>
+              <IconMaterialCom
+                onPress={() => this.props.navigation.push('MyEvents')}
                 style={
-                  this.props.stackName == 'MyAccount'
+                  this.props.stackName == 'MyEvents'
                     ? styles.highlightTabIcon
-                    : this.props.stackName == 'MyAccount'
+                    : this.props.stackName == 'CreateMessage'
+                    ? styles.highlightTabIcon
+                    : this.props.stackName == 'ViewMessage'
                     ? styles.highlightTabIcon
                     : styles.appFooterIcon
                 }
-                name="user"
-                // name="th-list"
+                // name="qrcode"
+                name="event"
               />
               <Text
-                onPress={() => this.props.navigation.push('MyAccount')}
+                onPress={() => this.props.navigation.push('MyEvents')}
                 style={
-                  this.props.stackName == 'MyAccount'
+                  this.props.stackName == 'MyEvents'
                     ? styles.highlightTab
-                    : this.props.stackName == 'MyAccount'
+                    : this.props.stackName == 'CreateMessage'
+                    ? styles.highlightTab
+                    : this.props.stackName == 'ViewMessage'
                     ? styles.highlightTab
                     : styles.appFooterBtn
                 }>
-                Account
+                {/* Attendance */}
+                My Events
               </Text>
             </Col>
-            {/* <Col size={21}>
+            <Col size={14}>
               <Icon
-                onPress={() => this.setState({popup2: true})}
-                // onPress={() => this.props.navigation.push('JournalList')}
+                onPress={() => {
+                  // if (this.state.has_complete_access === true) {
+                    this.props.navigation.push('Task');
+                  // } else {
+                  //   this.setState({popup2: true});
+                  // }
+                }}
                 style={
-                  this.props.stackName == 'JournalList'
+                  this.props.stackName == 'Task'
+                    ? styles.highlightTabIcon
+                    : this.props.stackName == 'Task'
                     ? styles.highlightTabIcon
                     : styles.appFooterIcon
                 }
-                name="book"
-                active
+                // name="user"
+                name="th-list"
               />
               <Text
-                onPress={() => this.setState({popup2: true})}
-                // onPress={() => this.props.navigation.push('JournalList')}
+                onPress={() => {
+                  // if (this.state.has_complete_access === true) {
+                    this.props.navigation.push('Task');
+                  // } else {
+                  //   this.setState({popup2: true});
+                  // }
+                }}
+                // onPress={() => this.props.navigation.push('Task')}
                 style={
-                  this.props.stackName == 'JournalList'
+                  this.props.stackName == 'Task'
+                    ? styles.highlightTab
+                    : this.props.stackName == 'Task'
                     ? styles.highlightTab
                     : styles.appFooterBtn
                 }>
-                My Diary
+                Task
               </Text>
-            </Col> */}
+            </Col>
             <Col size={5}></Col>
             <Col
               size={20}
@@ -149,8 +178,8 @@ export default class FooterTabsIconTextExample extends Component {
                 alignItems: 'center',
               }}>
               <View
-                onPress={() => this.props.navigation.push('ScanScreen')}
-                // onPress={() => this.openExtraOption()}
+                // onPress={() => this.props.navigation.push('ScanScreen')}
+                onPress={() => this.openExtraOption()}
                 style={{
                   backgroundColor: '#fff',
                   width: 60,
@@ -173,48 +202,54 @@ export default class FooterTabsIconTextExample extends Component {
                 }}>
                 <Icon
                   size={35}
-                  onPress={() => this.props.navigation.push('ScanScreen')}
-                  // onPress={() => this.openExtraOption()}
+                  // onPress={() => this.props.navigation.push('ScanScreen')}
+                  onPress={() => this.openExtraOption()}
                   style={[
                     styles.appFooterMiddleIcon,
-                    this.props.stackName == 'ScanScreen'
-                      && styles.highlightMiddleTabIcon
+                    // this.props.stackName == 'ScanScreen' &&
+                    //   styles.highlightMiddleTabIcon,
                   ]}
-                  name="qrcode"
+                  name="plus"
+                  // name="qrcode"
                 />
               </View>
             </Col>
             <Col size={5}></Col>
-            {/* <Col size={21}>
+            <Col size={21}>
               <Icon
-                onPress={() => this.props.navigation.push('ScanScreen')}
+                onPress={() => {
+                  if (this.state.has_complete_access === true) {
+                    this.props.navigation.push('JournalList');
+                  } else {
+                    this.setState({popup2: true});
+                  }
+                }}
+                // onPress={() => this.props.navigation.push('JournalList')}
                 style={
-                  this.props.stackName == 'EMessage'
-                    ? styles.highlightTabIcon
-                    : this.props.stackName == 'CreateMessage'
-                    ? styles.highlightTabIcon
-                    : this.props.stackName == 'ViewMessage'
+                  this.props.stackName == 'JournalList'
                     ? styles.highlightTabIcon
                     : styles.appFooterIcon
                 }
-                name="qrcode"
-                // name="envelope"
+                name="book"
+                active
               />
               <Text
-                onPress={() => this.props.navigation.push('ScanScreen')}
+                onPress={() => {
+                  if (this.state.has_complete_access === true) {
+                    this.props.navigation.push('JournalList');
+                  } else {
+                    this.setState({popup2: true});
+                  }
+                }}
+                // onPress={() => this.props.navigation.push('JournalList')}
                 style={
-                  this.props.stackName == 'EMessage'
-                    ? styles.highlightTab
-                    : this.props.stackName == 'CreateMessage'
-                    ? styles.highlightTab
-                    : this.props.stackName == 'ViewMessage'
+                  this.props.stackName == 'JournalList'
                     ? styles.highlightTab
                     : styles.appFooterBtn
                 }>
-                Attendance
-                 My Messages 
+                My Diary
               </Text>
-            </Col> */}
+            </Col>
             <Col size={14}>
               <IconMaterialCom
                 onPress={() =>
@@ -227,12 +262,12 @@ export default class FooterTabsIconTextExample extends Component {
                     ? styles.highlightTabIcon
                     : styles.appFooterIcon
                 }
-                name="message                                                                                                                                                                                                                             "
+                name="message"
               />
               <Text
                 onPress={
                   // () => this.props.navigation.push('EditSettings')
-                  ()=> this.props.navigation.push('ChatMessage', {chat: chat})
+                  () => this.props.navigation.push('ChatMessage', {chat: chat})
                 }
                 style={
                   this.props.stackName == 'ChatMessage'

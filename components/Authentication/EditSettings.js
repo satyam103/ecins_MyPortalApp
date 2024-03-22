@@ -87,7 +87,7 @@ export default class EditSettings extends ValidationComponent {
                       <IconFont name="chevron-right" />
                     </View>
                   </Pressable>
-                  <Pressable
+                  {/* <Pressable
                     style={{flexDirection: 'row', marginVertical: 30}}
                     onPress={() =>
                       this.closeExtraOption('logout', {
@@ -105,11 +105,11 @@ export default class EditSettings extends ValidationComponent {
                         }}>
                         Logout
                       </Text>
-                    </View>
+                    </View> */}
                     {/* <View style={{alignSelf: 'center'}}>
                       <IconFont name="chevron-right" />
                     </View> */}
-                  </Pressable>
+                  {/* </Pressable> */}
                 </View>
               </View>
             </ScrollView>

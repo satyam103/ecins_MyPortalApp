@@ -55,9 +55,9 @@ export default class Login extends ValidationComponent {
                   if (wheatherResponse !== null) {
                     if (wheatherResponse.isEnable)
                       this.props.navigation.navigate('HideFunction');
-                    else this.props.navigation.navigate('MyAccount');
+                    else this.props.navigation.navigate('MyEvents');
                   } else {
-                    this.props.navigation.navigate('MyAccount');
+                    this.props.navigation.navigate('MyEvents');
                   }
                 });
               }
@@ -68,7 +68,7 @@ export default class Login extends ValidationComponent {
               if (!statusResponse.status) {
                 this.props.navigation.navigate('Login');
               } else {
-                this.props.navigation.navigate('MyAccount');
+                this.props.navigation.navigate('MyEvents');
               }
             });
           }
@@ -107,8 +107,8 @@ export default class Login extends ValidationComponent {
     console.log(formData)
     console.log(global.ApiUrl + '/api/oauth/token')
     fetch(global.ApiUrl + '/api/oauth/token', requestOptions)
-      .then((response) => {
-        return response.json();
+      .then(async (response) => {
+        return await response.json();
       })
       .then((responseJson) => {
         console.log(responseJson);
@@ -220,7 +220,7 @@ export default class Login extends ValidationComponent {
               });
             }
           }).then((res) => {
-            this.props.navigation.navigate('MyAccount');
+            this.props.navigation.navigate('MyEvents');
           });
         } else {
           this.props.navigation.navigate('Login');

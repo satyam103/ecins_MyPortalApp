@@ -141,7 +141,7 @@ export default class MyAccount extends Component {
 
     return (
       <View>
-        <View style={{height: '96%'}}>
+        <View>
           <SafeAreaView>
             <ScrollView
               contentInsetAdjustmentBehavior="automatic"
@@ -157,7 +157,7 @@ export default class MyAccount extends Component {
                 />
               </View>
             </ScrollView>
-            <Pressable
+            {/* <Pressable
               onPress={() => this.props.navigation.push('EditSettings')}
               style={{
                 margin: 10,
@@ -175,15 +175,15 @@ export default class MyAccount extends Component {
               }}>
               <Text style={{marginRight:10}}>Settings</Text>
               <Icon name='chevron-right' />
-            </Pressable>
+            </Pressable> */}
           </SafeAreaView>
         </View>
-        <View>
+        {/* <View>
           <AppFooter
             stackName={this.props.route.name}
             navigation={this.props.navigation}
           />
-        </View>
+        </View> */}
         {this.state.active_private_mode && (
           <View
             style={{
